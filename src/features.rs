@@ -15,6 +15,7 @@ fn list_domains() {
     println!("{}", domain);
 }
 
+// TODO: Get root privaliges to write to /etc/hosts
 fn add_domain(domain: &str) {
     // Give the privaliges to append data to the right file, and raise an
     // error if appending is not possible
