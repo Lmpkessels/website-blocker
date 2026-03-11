@@ -2,7 +2,7 @@
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Built with Rust](https://img.shields.io/badge/Built%20with-Rust-red.svg)
-![Status: in Progress](https://img.shields.io/badge/Status-Slowed%20down-orange.svg)
+![Status: in Progress](https://img.shields.io/badge/Status-in%20Progress-orange.svg)
 
 Blocker is a CLI website blocker written in Rust to remain focus for a given amount of time which is chosen by the user. This CLI is developed for Linux Ubuntu.
 
