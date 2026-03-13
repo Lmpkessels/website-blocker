@@ -1,7 +1,10 @@
-//TODO: Create one global variable that contains the path towards /etc/hosts
 use std::fs::{ File, OpenOptions };
+use std::fs;
 use std::io::{ Read, Write };
 use crossterm::event::{ read, Event, KeyCode };
+use std::time::Duration;
+use std::thread::sleep;
+use std::os::unix::fs::PermissionsExt;
 
 const HOSTS_PATH: &str = "data.txt"; // The path to which the domains will be 
                                      // written
@@ -63,7 +66,7 @@ fn unblock_domains() {
         // Count keystrokes
         if let Event::Key(event) = read().unwrap() {
             match event.code {
-                KeyCode::Enter => {}, // Enter is not counted as a keystroke
+                KeyCode::Enter => {}, // 'Enter' is not counted as a keystroke
                 _ => keystrokes_recieved += 1
             }
         }
@@ -83,8 +86,40 @@ fn unblock_domains() {
     }
 }
 
+enum Unit {
+    Minutes,
+    Hours
+}
+
+// Block domains asks for a time in minutes or hours depending on user input,
+// Then the file is made writable only for the given amount of time, when the
+// timer has run out of time the file becomes writable again.
+fn block_domains(time: u64, unit: Unit) {
+    let time_to_block = match unit {
+        Unit::Minutes => time * 60,
+        Unit::Hours => time * 60 * 60,
+    };
+
+    if time_to_block == 0 {
+        return;
+    }
+
+    let unwritable = fs::Permissions::from_mode(0o444);
+    let writable = fs::Permissions::from_mode(0o644);   
+
+    fs::set_permissions(HOSTS_PATH, unwritable).unwrap(); // Set permission to
+                                                          // read write
+
+    // Run the timer
+    sleep(Duration::from_secs(time_to_block));
+
+    fs::set_permissions(HOSTS_PATH, writable).unwrap();   // Set permision to 
+                                                          // write only
+}
+
 fn main() {
-    list_domains();
-    add_domain("test");
-    unblock_domains();
+    // list_domains();
+    // add_domain("test");
+    // unblock_domains();
+    block_domains(1, Unit::Minutes);
 }
