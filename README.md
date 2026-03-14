@@ -45,7 +45,7 @@ sudo blocker remove example.com
 blocker list
 
 # Temporarily block all added domains
-# Supported units: min, h, d (minutes, hours)
+# Supported units: min, h(minutes, hours)
 sudo blocker block 30min
 sudo blocker block 2h
 
