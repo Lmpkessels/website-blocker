@@ -19,22 +19,26 @@ cd blocker
 
 ```bash
 # Commands for the blocker
-cargo run -- add domain
-cargo run -- remove domain
+./run_as_root.sh add domain -- domain-name
+./run_as_root.sh remove domain-name
 cargo run -- list
 cargo run -- block time (min or hour)
 cargo run -- unblock
+
+# for writing to /etc/hosts, make run_as_root.sh executable trough,
+chmod +x run_as_root.sh
+./run_as_root.sh
 ```
 
-- When you **add a domain** through _cargo run -- add domain-name_ 127.0.0.1 domainname, and 127.0.0.1 domainname.com will be added to /etc/hosts
+- When you **add a domain** through (./run_as_root.sh add domain -- domain-name) 127.0.0.1 domainname, and 127.0.0.1 domainname.com will be added to /etc/hosts
 
-- When you **remove a domain** through _cargo run -- remove domain-name_ the file /etc/hosts will be overwritten
+- When you **remove a domain** through (cargo run -- remove domain-name) the file /etc/hosts will be overwritten
 
-- When you **list** _through cargo run -- list domain-name_ the domain name /etc/hosts is shown so you can see all domains that are blocked
+- When you **list** trough (cargo run -- list domain-name) the domain name /etc/hosts is shown so you can see all domains that are blocked
 
-- When you use **block** you type the amount of time you want to block with the unit of time so for example if you want to block for 30 min you write _cargo run -- block 30 min_ if you want to block 2 hour then you write cargo -- run block 2 hour
+- When you use **block** you type the amount of time you want to block with the unit of time so for example if you want to block for 30 min you write (cargo run -- block 30 min) if you want to block 2 hour then you write cargo -- run block 2 hour
 
-- When you want to unblock the domains you've blocked you simply run _cargo run -- unblock_ then you type a 500 word passphrase to unblock the system
+- When you want to **unblock the domains** you've blocked you simply run (cargo run -- unblock) then you type a 500 word passphrase to unblock the system
 
 ## Future features
 
@@ -49,3 +53,7 @@ to discuss what you would like to change.
 
 Licensed under [MIT License](./LICENSE-MIT). <br/>
 © 2026 Luuk Kessels
+
+```
+
+```
