@@ -1,19 +1,19 @@
-use blocker::{ 
-    Unit, add_domain, block_domains, remove_domain, list_domains, 
-    unblock_domains
+use crate::{ 
+    Unit, add_domain, block_domains, remove_domain, list_domains,
+    unblock_domains 
 };
 use clap::{ Parser, Subcommand, CommandFactory };
 
 #[derive(Parser)]
 #[command(name = "blocker")]
 #[command(about = "Block distracting domains by editing /etc/hosts")]
-struct Cli {
+pub struct Cli {
     #[command(subcommand)]
-    command: Commands,
+    pub command: Commands,
 }
 
 #[derive(Subcommand)]
-enum Commands {
+pub enum Commands {
     Add {
         domain: String,
     },

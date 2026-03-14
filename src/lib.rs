@@ -12,4 +12,4 @@ pub use constants::HOSTS_PATH;
 pub use list::list_domains;
 pub use remove::remove_domain;
 pub use unblock::unblock_domains;
-pub use cli::run;
+pub use cli::{ Commands, Cli };
