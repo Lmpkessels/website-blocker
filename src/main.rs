@@ -4,9 +4,9 @@ pub use blocker::{
 };
 
 fn main() {
-    add_domain("test");
-    block_domains(2, Unit::Minutes);
     list_domains();
-    remove_domain("test");
+    block_domains(2, Unit::Minutes);
     unblock_domains();
+    add_domain("test");
+    remove_domain("test");
 }
