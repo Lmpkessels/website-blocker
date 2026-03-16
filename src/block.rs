@@ -4,9 +4,8 @@ use std::io::Write;
 use std::time::Duration;
 use std::thread::sleep;
 use std::os::unix::fs::PermissionsExt;
-use crate::constants::HOSTS_PATH;
+use crate::constants::{ HOSTS_PATH, STORED_DOMAINS };
 use clap::ValueEnum;
-use std::collections::HashSet;
 
 #[derive(Debug, Clone, ValueEnum)]
 pub enum Unit {
@@ -17,13 +16,13 @@ pub enum Unit {
 // Block domains asks for a time in minutes or hours depending on user input,
 // Then the file is made writable only for the given amount of time, when the
 // timer has run out of time the file becomes writable again.
-pub fn block_domains(domains: &HashSet<String>, time: u64, unit: Unit) {
+pub fn block_domains(time: u64, unit: Unit) {
     let time_to_block = match unit {
         Unit::Min => time * 60,
         Unit::Hour => time * 60 * 60,
     };
 
-    // Check if a time to block is given by the reader.
+    // Check if a time to block is given by the user else exit function
     if time_to_block == 0 {
         return;
     }
@@ -31,6 +30,8 @@ pub fn block_domains(domains: &HashSet<String>, time: u64, unit: Unit) {
     let content = read_to_string(HOSTS_PATH).expect("Cannot read /etc/hosts");
     let mut new_content = String::new();
     let mut skip_before = false;
+    // Check all lines in /etc/hosts and overwrite the file in between the
+    // comments # BLOCKER START, # BLOCKER END
     for line in content.lines() {
         if line.trim() == "# BLOCKER START" {
             skip_before = true;
@@ -49,7 +50,8 @@ pub fn block_domains(domains: &HashSet<String>, time: u64, unit: Unit) {
     }
 
     new_content.push_str("# BLOCKER START\n");
-    for domain in domains {
+    let domains = read_to_string(STORED_DOMAINS).expect("Cannot open /etc/hosts.stored");
+    for domain in domains.lines() {
         new_content.push_str(
             &format!(
                 "127.0.0.1 www.{}\n127.0.0.1 www.{}.com\n",
@@ -69,6 +71,8 @@ pub fn block_domains(domains: &HashSet<String>, time: u64, unit: Unit) {
     file_before.write_all(new_content.as_bytes())
         .expect("Failed to write /etc/hosts");
 
+    // Make /etc/hosts unwritable during the block, and run the block,
+    // then make it writable again
     let unwritable = fs::Permissions::from_mode(0o444);
     fs::set_permissions(HOSTS_PATH, unwritable).unwrap(); // Set permission to
                                                           // read write
