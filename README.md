@@ -31,7 +31,7 @@ It modifies `/etc/hosts` to block distracting domains for a chosen amount of tim
 
 ```bash
 # For sudo access
-sudo cp target/release/blocker /usr/local/bin/blocker
+sudo cp -f target/release/blocker /usr/local/bin/blocker
 
 # Add a domain (blocks it permanently until removed)
 # Automatically adds: 127.0.0.1 example.com and 127.0.0.1 www.example.com
@@ -54,6 +54,8 @@ sudo blocker block 2h
 # You need to enter a 500 word passphrase passphrase
 sudo blocker unblock
 ```
+
+When you stop the process through CTRL-C you should manually use sudo nano /etc/hosts to remove the blocked domains, because the program was stoped earlier.
 
 ## Future features
 
