@@ -1,6 +1,6 @@
 use blocker::Cli;
-use clap::{ Parser, Subcommand, CommandFactory };
+use clap::Parser;
 
 fn main() {
-    let cli = Cli::parse().command.run();
+    let _cli = Cli::parse().command.run();
 }
