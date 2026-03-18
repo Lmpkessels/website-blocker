@@ -16,7 +16,7 @@ It modifies `/etc/hosts` to block distracting domains for a chosen amount of tim
 
 ## Installation
 
-1. Make sure you have Rust installed:  
+1. Install Rust (if not installed):  
    https://www.rust-lang.org/tools/install
 
 2. Clone and build:
@@ -27,32 +27,75 @@ It modifies `/etc/hosts` to block distracting domains for a chosen amount of tim
    cargo build --release
    ```
 
+3. Copy the binary
+   sudo cp -f target/release/blocker /usr/local/bin/blocker
+
 ## Usage
 
 ```bash
-# For sudo access
-sudo cp -f target/release/blocker /usr/local/bin/blocker
-
-# Add a domain (blocks it permanently until removed)
-# Automatically adds: 127.0.0.1 example.com and 127.0.0.1 www.example.com
+# Add a domain
 sudo blocker add example.com
+```
 
+```bash
 # Remove a domain
 sudo blocker remove example.com
+```
 
-# List all currently blocked domains
-# (no sudo needed for read-only commands)
+```bash
+# List blocked domains
 blocker list
+```
 
-# Temporarily block all added domains
-# Supported units: min, h(minutes, hours)
-sudo blocker block 30min
+```bash
+# Temporary block
+# Minutes
+sudo blocker block 30 min
+```
+
+```bash
+# Hours
 sudo blocker block 2h
+```
 
-
-# Unblock (requires passphrase)
-# You need to enter a 500 word passphrase passphrase
+```bash
+# Unblock (500 keystroke passphrase)
 sudo blocker unblock
+```
+
+```bash
+# Run as systemd service (recommended)
+#1 access blocker.service
+sudo nano /etc/systemd/system/blocker.service
+```
+
+```bash
+#2 paste the following text into blocker.service
+[Unit]
+Description=Blocker Daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/blocker daemon
+Restart=always
+User=root
+WorkingDirectory=/root
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+#3 Reload system and enable service
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl enable blocker
+```
+
+```bash
+#4 Start the service
+sudo systemctl start blocker
+sudo systemctl status blocker
 ```
 
 When you stop the process through CTRL-C you should manually use sudo nano /etc/hosts to remove the blocked domains, because the program was stoped earlier.
