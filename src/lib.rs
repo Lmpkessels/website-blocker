@@ -1,15 +1,12 @@
-pub mod add;
-pub mod remove;
-pub mod block;
-pub mod constants;
-pub mod list;
-pub mod unblock;
 pub mod cli;
+pub mod blocker;
+pub mod hosts;
+pub mod permissions;
+pub mod state;
 
-pub use add::add_domain;
-pub use remove::remove_domain;
-pub use block::{ block_domains, Unit };
-pub use constants::HOSTS_PATH;
-pub use list::list_domains;
-pub use unblock::unblock_domains;
-pub use cli::{ Commands, Cli };
+pub use blocker::{set_block, set_unblock, daemon};
+pub use hosts::{
+    add_domain, remove_domain, list_domains, apply_block, clean_block
+};
+pub use permissions::{lock, unlock};
+pub use state::{State, now, save, load};

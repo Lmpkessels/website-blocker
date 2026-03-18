@@ -1,42 +1,36 @@
-//TODO: Create a file to store the domains the user gives outside of /etc/hosts
-use crate::{ 
-    Unit, add_domain, block_domains, remove_domain, list_domains,
-    unblock_domains 
-};
-use clap::{ Parser, Subcommand };
+use clap::{Parser, Subcommand};
+use crate::blocker::{set_block, set_unblock, daemon};
 
 #[derive(Parser)]
 #[command(name = "blocker")]
-#[command(about = "Block distracting domains by editing /etc/hosts")]
 pub struct Cli {
     #[command(subcommand)]
-    pub command: Commands,
+    command: Commands,
 }
 
 #[derive(Subcommand)]
-pub enum Commands {
-    Add {
-        domain: String,
-    },
-    Block {
-        time: u64,
-        unit: Unit,
-    },
-    Remove {
-        domain: String,
-    },
+enum Commands {
+    Add { domain: String },
+    Remove { domain: String },
     List,
-    Unblock
+    Block { time: u64 },
+    Unblock,
+    Daemon,
 }
 
-impl Commands {
+impl Cli {
     pub fn run(self) {
-        match self {
-            Commands::Add { domain } => add_domain(&domain),
-            Commands::Block { time, unit } => block_domains(time, unit),
-            Commands::Remove { domain } => remove_domain(&domain),
-            Commands::List => list_domains(),
-            Commands::Unblock => unblock_domains(),
+        match self.command {
+            Commands::Add { domain } => crate::hosts::add_domain(&normalize(&domain)),
+            Commands::Remove { domain } => crate::hosts::remove_domain(&normalize(&domain)),
+            Commands::List => crate::hosts::list_domains(),
+            Commands::Block { time } => set_block(time),
+            Commands::Unblock => set_unblock(),
+            Commands::Daemon => daemon(),
         }
     }
+}
+
+fn normalize(d: &str) -> String {
+    d.trim().trim_start_matches("www.").to_string()
 }

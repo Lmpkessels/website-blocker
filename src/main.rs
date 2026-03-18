@@ -1,6 +1,11 @@
-use blocker::Cli;
+mod cli;
+mod state;
+mod hosts;
+mod blocker;
+
+use cli::Cli;
 use clap::Parser;
 
 fn main() {
-    let _cli = Cli::parse().command.run();
+    Cli::parse().run();
 }
