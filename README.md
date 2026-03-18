@@ -98,8 +98,6 @@ sudo systemctl start blocker
 sudo systemctl status blocker
 ```
 
-When you stop the process through CTRL-C you should manually use sudo nano /etc/hosts to remove the blocked domains, because the program was stoped earlier.
-
 ## Future features
 
 Making sure this runs after rebooting the system and killing the running process becomes harder for the given amount of time.
