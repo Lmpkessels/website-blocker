@@ -113,3 +113,13 @@ to discuss what you would like to change.
 
 Licensed under [MIT License](./LICENSE-MIT). <br/>
 © 2026 Luuk Kessels
+
+<details>
+  <summary>Contact</summary>
+  <ul>
+      <li><a href="mailto:l@lmpkessels.com"></a>e-mail</li>
+      <li><a href="">https://x.com/lmpkessels</a>X/Twitter</li>
+      <li><a href="www.linkedin.com/in/lmpkessels"></a>LinkedIn</li>
+      <li><a href="https://github.com/Lmpkessels"></a>GitHub</li>
+  </ul>
+</details>
