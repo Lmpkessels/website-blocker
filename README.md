@@ -61,7 +61,7 @@ sudo blocker block 2h
 ```
 
 ```bash
-# Unblock (500 keystroke passphrase)
+# Unblock (10000 keystroke passphrase)
 sudo blocker unblock
 ```
 
