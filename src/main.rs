@@ -1,5 +1,4 @@
 mod cli;
-mod state;
 mod hosts;
 mod blocker;
 mod permissions;

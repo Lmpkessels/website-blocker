@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use crate::blocker::{Unit, set_block, set_unblock, daemon};
+use crate::blocker::{Unit, set_block, set_unblock};
 
 #[derive(Parser)]
 #[command(name = "blocker")]
@@ -22,7 +22,6 @@ enum Commands {
         unit: Unit
     },
     Unblock,
-    Daemon,
 }
 
 impl Cli {
@@ -33,7 +32,6 @@ impl Cli {
             Commands::List => crate::hosts::list_domains(),
             Commands::Block { amount, unit } => set_block(amount, unit),
             Commands::Unblock => set_unblock(),
-            Commands::Daemon => daemon(),
         }
     }
 }
