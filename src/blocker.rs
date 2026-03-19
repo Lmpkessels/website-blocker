@@ -1,11 +1,8 @@
 use std::{thread, time::Duration};
 use crate::state::{save, load, now, State};
 use crate::hosts::{apply_block, clean_block};
-use std::fs;
-use std::os::unix::fs::PermissionsExt;
+use crate::permissions::{lock, unlock};
 use clap::ValueEnum;
-
-const HOSTS: &str = "/etc/hosts";
 
 #[derive(Debug, Clone, ValueEnum)]
 pub enum Unit {
@@ -18,6 +15,9 @@ pub fn set_block(amount: u64, unit: Unit) {
         Unit::Min => amount * 60,
         Unit::Hour => amount * 60 * 60,
     };
+
+    apply_block();
+    lock();
 
     let state = State {
         blocked: true,
@@ -56,14 +56,4 @@ fn enforce() {
             });
         }
     }
-}
-
-fn lock() {
-    let p = fs::Permissions::from_mode(0o444);
-    fs::set_permissions(HOSTS, p).ok();
-}
-
-fn unlock() {
-    let p = fs::Permissions::from_mode(0o644);
-    fs::set_permissions(HOSTS, p).ok();
 }
